@@ -1,1 +1,1 @@
-# Git Check
+print("Git works here.")
