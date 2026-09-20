@@ -103,3 +103,77 @@ Verify
    ↓
 Record
 ```
+
+## Development Philosophy
+
+AndroidForge is being developed using a **learn-while-building** approach.
+
+The project itself is the learning environment:
+
+```text
+Build
+ ↓
+Encounter an unknown
+ ↓
+Learn the required concept
+ ↓
+Implement
+ ↓
+Break it
+ ↓
+Debug
+ ↓
+Understand the failure
+ ↓
+Improve the design
+ ↓
+Document
+```
+
+The goal is not to hide Android's complexity behind arbitrary abstractions, but to understand the underlying systems well enough to build reliable abstractions.
+
+## Roadmap
+
+### v0.1
+
+* [ ] Project structure
+* [ ] CLI
+* [ ] ADB backend
+* [ ] Device discovery
+* [ ] Device inspection
+* [ ] Capability engine
+* [ ] Operation registry
+* [ ] Initial operations
+* [ ] Validation
+* [ ] Verification
+* [ ] History
+* [ ] Basic rollback
+* [ ] Tests
+* [ ] Documentation
+
+### Future
+
+* Shizuku backend
+* Root backend
+* OEM adapters
+* Android application
+* Theme/customization engine
+* Plugin architecture
+* Advanced diagnostics
+* Broader device compatibility
+
+## Project Status
+
+AndroidForge is currently a personal open-source engineering project in early development.
+
+The architecture, APIs, and capabilities may change significantly before the first stable release.
+
+## License
+
+AndroidForge is licensed under the **Apache License 2.0**.
+
+See [`LICENSE`](LICENSE) for the full license text.
+
+## Contributing
+
+Contribution guidelines will be added as the project approaches its first public development release.
