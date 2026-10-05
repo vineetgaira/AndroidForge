@@ -11,6 +11,7 @@ name = "androidforge"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "colorama" },
     { name = "typer" },
 ]
 
@@ -23,6 +24,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "colorama", specifier = ">=0.4.6" },
     { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.15" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.12" },
