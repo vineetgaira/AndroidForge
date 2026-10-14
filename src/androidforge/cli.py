@@ -2,13 +2,11 @@ import typer
 
 app = typer.Typer()
 
-
 @app.callback()
 def callback():
     """
-    Welcome to android forge
+    Welcome to androidforge. Make android open.
     """
-
 
 @app.command()
 def devices():
@@ -16,7 +14,6 @@ def devices():
     This tells about devices that are connected
     """
     typer.echo("To be Implemented")
-
 
 @app.command()
 def inspect():
