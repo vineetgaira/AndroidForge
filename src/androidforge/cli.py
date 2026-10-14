@@ -13,11 +13,21 @@ def callback():
 @app.command()
 def devices():
     """
-   All the methods are to be implemented.
+    This tells about devices that are connected
     """
     typer.echo("To be Implemented")
 
 
 @app.command()
-def compatible():
+def inspect():
+    """
+    Gives details about the device
+    """
+    typer.echo("To be implemented")
+
+@app.command()
+def capabilities():
+    """
+    Gives us device capabilities
+    """
     typer.echo("To be implemented")
