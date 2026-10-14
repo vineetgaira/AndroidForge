@@ -47,7 +47,7 @@ dev = [
 
 
 [project.scripts]
-androidforge = "androidforge.cli:main"
+androidforge = "androidforge.cli:app"
 
 
 [tool.setuptools.packages.find]

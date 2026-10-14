@@ -1,8 +1,23 @@
 import typer
 
-def main(name: str):
-    print(f"Hello {name}!")
+app = typer.Typer()
 
 
-if __name__ == "__main__":
-    typer.run(main)
+@app.callback()
+def callback():
+    """
+    Welcome to android forge
+    """
+
+
+@app.command()
+def devices():
+    """
+   All the methods are to be implemented.
+    """
+    typer.echo("To be Implemented")
+
+
+@app.command()
+def compatible():
+    typer.echo("To be implemented")
