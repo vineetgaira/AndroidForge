@@ -1,3 +1,1 @@
-def main() -> None:
-    print("Hello from AndroidForge")
-
+"""AndroidForge: a capability-driven control layer for Android."""

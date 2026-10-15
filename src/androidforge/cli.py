@@ -1,30 +1,30 @@
 import typer
 
-app = typer.Typer()
+app = typer.Typer(
+    name = "androidforge",
+    help = "A capability-driven control layer for Android devices.",
+    no_args_is_help=True,
 
-@app.callback()
-def callback():
-    """
-    Welcome to androidforge. Make android open.
-    """
+
+)
 
 @app.command()
 def devices():
     """
-    This tells about devices that are connected
+    List connected android devices.
     """
-    typer.echo("To be Implemented")
+    typer.echo("Device discovery is not implemented yet.")
 
 @app.command()
 def inspect():
     """
-    Gives details about the device
+    Inspect an Android device.
     """
-    typer.echo("To be implemented")
+    typer.echo("Device inspection is not implemented yet.")
 
 @app.command()
 def capabilities():
     """
-    Gives us device capabilities
+    Display capabilities available on a device.
     """
-    typer.echo("To be implemented")
+    typer.echo("Capability detection is not implemented yet.")
