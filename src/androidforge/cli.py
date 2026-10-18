@@ -28,3 +28,11 @@ def capabilities():
     Display capabilities available on a device.
     """
     typer.echo("Capability detection is not implemented yet.")
+
+@app.command()
+def operations():
+    """
+    Lists all the operations possible on a device.
+    """
+
+    typer.echo("Operations is not implemented yet.")
