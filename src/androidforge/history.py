@@ -14,6 +14,7 @@ from androidforge.errors import AndroidForgeError
 def history_path() -> Path:
     """Get the history file path, respecting the XDG state directory."""
     state_dir = Path(os.environ.get("XDG_STATE_HOME", Path.home() / ".local" / "state"))
+    # Keep device output in the user state area; this history can contain sensitive data.
     return state_dir / "androidforge" / "history.jsonl"
 
 
@@ -46,6 +47,7 @@ def record_operation(operation: str, serial: str, result: str) -> dict[str, Any]
     path = history_path()
     try:
         path.parent.mkdir(parents=True, exist_ok=True)
+        # JSONL append keeps prior records intact and makes each operation one durable row.
         with path.open("a", encoding="utf-8") as stream:
             stream.write(json.dumps(entry) + "\n")
     except OSError as exc:

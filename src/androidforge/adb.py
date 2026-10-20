@@ -17,6 +17,7 @@ def run_adb(*args: str, serial: str | None = None, timeout: float = 15) -> str:
             "adb was not found. Install Android platform-tools and add adb to PATH."
         )
 
+    # Keep arguments as a list: serials and shell values must never become shell syntax.
     command = [adb]
     if serial:
         command.extend(("-s", serial))
@@ -61,6 +62,7 @@ def list_devices() -> list[dict[str, str]]:
 def select_device(serial: str | None = None) -> str:
     """Return the selected ready device serial or raise an actionable error."""
     devices = list_devices()
+    # ADB can list unauthorized/offline devices; only "device" is safe to target.
     ready_devices = [device for device in devices if device["state"] == "device"]
 
     if serial:

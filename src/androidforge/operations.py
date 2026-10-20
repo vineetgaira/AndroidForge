@@ -65,6 +65,8 @@ def _shell(serial: str, *args: str) -> str:
 
 def _settings(serial: str, namespace: str, *keys: str) -> dict[str, str]:
     values: dict[str, str] = {}
+    # Settings vary by Android version and vendor, so one missing key should not
+    # take down the whole read-only report.
     for key in keys:
         try:
             values[key] = _shell(serial, "settings", "get", namespace, key)
@@ -75,6 +77,7 @@ def _settings(serial: str, namespace: str, *keys: str) -> dict[str, str]:
 
 def _queries(serial: str, *commands: tuple[str, ...]) -> dict[str, str]:
     values: dict[str, str] = {}
+    # Preserve each query independently: partial data is more useful than a blank report.
     for command in commands:
         label = " ".join(command)
         try:
