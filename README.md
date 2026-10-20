@@ -26,6 +26,20 @@ uv run androidforge --help
 
 Or install the project into the active Python environment with `python -m pip install -e .`, then run `androidforge` directly.
 
+## Project layout
+
+```text
+src/androidforge/
+├── adb.py          ADB process execution and device selection
+├── cli.py          Typer commands and terminal output
+├── device.py       Device inspection and capability reporting
+├── errors.py       Shared user-facing application errors
+├── history.py      Local operation history storage
+└── operations.py   Operation definitions and execution
+```
+
+The CLI module handles arguments and output. Device and operation logic lives in separate modules so future backends and commands can reuse it without embedding Android behavior in the command handlers.
+
 ## Commands
 
 ```text
