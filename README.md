@@ -78,10 +78,7 @@ See the available operations:
 androidforge operation list
 ```
 
-Currently available operations are read-only:
-
-- `device-info` reads basic build and display information.
-- `battery` reads the output of Android's `dumpsys battery` command.
+The current read-only operations and their data sources are documented in [Operations](docs/operations.md). They use ADB shell commands, so Android version, manufacturer, device state, and shell permissions can affect which details are available. Some multi-source operations report individual unavailable queries; a failure in a single-source operation is reported as an error.
 
 For example:
 
