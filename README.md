@@ -1,179 +1,98 @@
 # AndroidForge
 
-**AndroidForge** is an open-source, capability-driven control layer for Android.
+AndroidForge is an early-stage, ADB-backed command-line tool for inspecting Android devices. Its current operations are read-only. The project aims to grow into a capability-driven control layer with validation, verification, history, and rollback support.
 
-It aims to provide a unified interface for discovering device capabilities, selecting the appropriate privilege mechanism, safely executing operations, verifying results, and tracking changes across different Android devices and OEM implementations.
+## Requirements
 
-> **Status:** Early development — API and architecture are subject to change.
+- Python 3.11 or newer
+- Android SDK Platform-Tools (`adb`) installed and available on `PATH`
+- An Android device with USB debugging enabled, or an ADB-connected emulator
 
-## Goals
+When connecting a physical device, unlock it and accept the USB debugging authorization prompt. Check that ADB can see it with `adb devices -l`.
 
-AndroidForge is being built around a few core ideas:
+## Install for development
 
-* Discover what an Android device can actually do.
-* Detect which backend is required for an operation.
-* Support multiple privilege mechanisms such as ADB, Shizuku, and eventually root.
-* Abstract OEM-specific differences.
-* Validate operations before execution.
-* Verify that changes actually occurred.
-* Track changes and support rollback where possible.
-* Provide a foundation for future Android customization and automation tools.
-
-## Architecture
-
-```text
-                    AndroidForge
-                         │
-                  Capability Engine
-                         │
-          ┌──────────────┼──────────────┐
-          │              │              │
-         ADB          Shizuku         Root
-          │              │              │
-          └──────────────┼──────────────┘
-                         │
-                  Android Devices
-```
-
-The core concepts are:
-
-```text
-Device
-Capability
-Backend
-Operation
-OperationPlan
-StateSnapshot
-OperationResult
-DeviceAdapter
-```
-
-## Current Focus
-
-The first milestone is a CLI-based foundation.
-
-Planned initial commands:
+From the repository root, create the development environment and install AndroidForge:
 
 ```bash
+uv sync --extra dev
+```
+
+Run the CLI through uv:
+
+```bash
+uv run androidforge --help
+```
+
+Or install the project into the active Python environment with `python -m pip install -e .`, then run `androidforge` directly.
+
+## Commands
+
+```text
 androidforge --version
-androidforge devices
-androidforge inspect
-androidforge capabilities
+androidforge devices [--json]
+androidforge inspect [--serial SERIAL] [--json]
+androidforge capabilities [--serial SERIAL] [--json]
 androidforge operation list
-androidforge operation run <name>
-androidforge history
-androidforge rollback <id>
+androidforge operation run NAME [--serial SERIAL] [--json]
+androidforge history [--limit COUNT] [--json]
+androidforge rollback ID
 ```
 
-Initial operations will focus on safe device inspection and basic system configuration.
+### Find and select a device
 
-## Design Principles
+List devices and their connection states:
 
-AndroidForge follows:
-
-* **Capability-driven design**
-* **Least privilege**
-* **Validation before mutation**
-* **Verification after mutation**
-* **Dry-run support**
-* **State snapshots**
-* **Audit/history**
-* **Idempotent operations where possible**
-* **Explicit handling of unsupported operations**
-* **OEM-specific adapters instead of hard-coded assumptions**
-
-An operation should not simply assume that a command works.
-
-Conceptually:
-
-```text
-Discover
-   ↓
-Check capability
-   ↓
-Plan
-   ↓
-Snapshot
-   ↓
-Confirm
-   ↓
-Apply
-   ↓
-Verify
-   ↓
-Record
+```bash
+androidforge devices
+androidforge devices --json
 ```
 
-## Development Philosophy
+Inspection commands select the only ready device automatically. If more than one device is ready, pass its serial using `--serial` (or `-s`):
 
-AndroidForge is being developed using a **learn-while-building** approach.
-
-The project itself is the learning environment:
-
-```text
-Build
- ↓
-Encounter an unknown
- ↓
-Learn the required concept
- ↓
-Implement
- ↓
-Break it
- ↓
-Debug
- ↓
-Understand the failure
- ↓
-Improve the design
- ↓
-Document
+```bash
+androidforge inspect --serial emulator-5554
 ```
 
-The goal is not to hide Android's complexity behind arbitrary abstractions, but to understand the underlying systems well enough to build reliable abstractions.
+`inspect` shows the serial, manufacturer, model, Android version, SDK level, build fingerprint, and display size and density when the device provides them. `capabilities` reports the ADB shell identity and the capabilities AndroidForge currently recognizes. It does not attempt to enable root or Shizuku.
 
-## Roadmap
+### Run operations
 
-### v0.1
+See the available operations:
 
-* [ ] Project structure
-* [ ] CLI
-* [ ] ADB backend
-* [ ] Device discovery
-* [ ] Device inspection
-* [ ] Capability engine
-* [ ] Operation registry
-* [ ] Initial operations
-* [ ] Validation
-* [ ] Verification
-* [ ] History
-* [ ] Basic rollback
-* [ ] Tests
-* [ ] Documentation
+```bash
+androidforge operation list
+```
 
-### Future
+Currently available operations are read-only:
 
-* Shizuku backend
-* Root backend
-* OEM adapters
-* Android application
-* Theme/customization engine
-* Plugin architecture
-* Advanced diagnostics
-* Broader device compatibility
+- `device-info` reads basic build and display information.
+- `battery` reads the output of Android's `dumpsys battery` command.
 
-## Project Status
+For example:
 
-AndroidForge is currently a personal open-source engineering project in early development.
+```bash
+androidforge operation run device-info
+androidforge operation run battery --serial emulator-5554 --json
+```
 
-The architecture, APIs, and capabilities may change significantly before the first stable release.
+Operation results are recorded locally in JSON Lines format at `$XDG_STATE_HOME/androidforge/history.jsonl`, or at `~/.local/state/androidforge/history.jsonl` when `XDG_STATE_HOME` is not set. View recent entries with `androidforge history`; use `--limit` to change the number shown or `--json` to output JSON.
 
-## License
+### Rollback status
 
-AndroidForge is licensed under the **Apache License 2.0**.
+The `rollback` command can look up a history entry, but no current operation has a rollback handler because all available operations only read device state. It reports that limitation for a valid entry. No device changes can currently be made through AndroidForge.
 
-See [`LICENSE`](LICENSE) for the full license text.
+## Development checks
 
-## Contributing
+Format and lint the Python package with the project's Ruff configuration:
 
-Contribution guidelines will be added as the project approaches its first public development release.
+```bash
+ruff format src/androidforge
+ruff check src/androidforge
+```
+
+## Project direction
+
+AndroidForge is being developed incrementally. Planned work includes broader device capability discovery, safe configuration operations, validation before changes, verification afterward, and rollback for operations that can be reversed. Shizuku, root backends, and OEM-specific adapters are future work.
+
+The project is licensed under the Apache License 2.0; see [LICENSE](LICENSE).
